@@ -1,75 +1,62 @@
-# React + TypeScript + Vite
+# Guess the Animal
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An Akinator-style game: think of an animal, answer yes/no questions, and the robot
+guesses it. When it's wrong, it asks you for the animal and a question that tells the
+two apart, and learns it for next time.
 
-Currently, two official plugins are available:
+Live: https://akinator.pknspace.com
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- Starts with 50 animals in a hand-written decision tree.
+- Learns new animals from players and remembers them in the browser (`localStorage`).
+- "Forget everything" resets to the starting animals.
+- Rejects offensive words in names and questions (English and Hindi/Hinglish blocklist).
+- Animations and confetti on a correct guess.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Stack
 
-## Expanding the ESLint configuration
+React 19 · Vite · Tailwind CSS v4 · Framer Motion · Vitest. No backend.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Development
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+## Scripts
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| Command | What it does |
+|---|---|
+| `npm run dev` | Dev server at http://localhost:5173 |
+| `npm run build` | Production build into `dist/` |
+| `npm run preview` | Serve the built `dist/` locally |
+| `npm run lint` | ESLint |
+| `npm test` | Unit tests (Vitest) |
+| `npm run check` | Lint and tests |
+| `npm run deploy` | Checks, builds and uploads to the VPS |
+| `npm run deploy:dry` | Same, but only previews the upload |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Deployment
 
-```
+The site is static: `npm run build` writes `dist/`, which is synced to a VPS where
+Caddy serves it directly (no restart needed).
+
+1. One-time setup: copy `.env.example` to `.env.prod.local` (git-ignored) and fill in
+   `DEPLOY_HOST`, `DEPLOY_PORT` and `DEPLOY_DIR`. You also need SSH key access to the server.
+2. Deploy:
+   ```bash
+   npm run deploy:dry   # preview what would change
+   npm run deploy       # checks, build, upload
+   ```
+
+## How it works
+
+- The knowledge is a binary tree (`src/data/animals.js`): question nodes have `yes`/`no`
+  children, leaves are animals. A game walks from the root to a leaf.
+- On a wrong guess, `insertAnimal` (`src/utils/tree.js`) replaces that leaf with the
+  player's question, putting the new and old animals on its two branches. The tree is
+  immutable, so each update produces a new tree that gets saved.
+- `validateTree` checks the tree is well-formed (no duplicates, no missing branches).
+  `npm test` runs it against the starting tree, so edits to `animals.js` are verified.
