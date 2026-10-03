@@ -1,5 +1,8 @@
 import { useState, type FormEvent } from 'react'
 import QuestionCard from './QuestionCard.tsx'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { bigButton } from '@/lib/styles'
 import { cleanAnimalName, cleanQuestion, hasAnimal, withArticle } from '../utils/tree.ts'
 import type { Answer, TreeNode } from '../utils/tree.ts'
 
@@ -8,11 +11,6 @@ type Props = {
   oldAnimal: string
   onLearn: (name: string, question: string, answer: Answer) => void
 }
-
-const inputClass =
-  'mt-6 w-full rounded-2xl border-2 border-slate-200 bg-white px-5 py-4 text-2xl outline-none focus:border-indigo-500'
-const submitClass =
-  'mt-5 rounded-2xl bg-indigo-600 px-10 py-4 text-2xl font-bold text-white shadow-lg transition hover:bg-indigo-700 active:scale-95'
 
 export default function LearnForm({ tree, oldAnimal, onLearn }: Props) {
   const [step, setStep] = useState<'name' | 'question' | 'answer'>('name')
@@ -54,28 +52,28 @@ export default function LearnForm({ tree, oldAnimal, onLearn }: Props) {
   return (
     <form onSubmit={submit} className="text-center">
       {step === 'name' ? (
-        <h2 className="text-3xl font-bold text-slate-800">I give up! What animal were you thinking of?</h2>
+        <h2 className="text-3xl font-bold text-foreground">I give up! What animal were you thinking of?</h2>
       ) : (
         <>
-          <h2 className="text-3xl font-bold leading-snug text-slate-800">
+          <h2 className="text-3xl font-bold leading-snug text-foreground">
             Give me a yes/no question that is true for {withArticle(name)} but false for {withArticle(oldAnimal)}.
           </h2>
-          <p className="mt-3 text-lg text-slate-500">Example: “Does it have a very long neck?”</p>
+          <p className="mt-3 text-lg text-muted-foreground">Example: “Does it have a very long neck?”</p>
         </>
       )}
-      <input
+      <Input
         key={step}
         autoFocus
         value={value}
         onChange={(e) => { setValue(e.target.value); setError('') }}
         maxLength={step === 'name' ? 30 : 100}
         placeholder={step === 'name' ? 'e.g. Giraffe' : 'Does it …?'}
-        className={inputClass}
+        className="mt-6 h-auto rounded-2xl border-2 bg-white px-5 py-4 text-2xl md:text-2xl"
         autoComplete="off"
         aria-invalid={!!error}
       />
-      <p className="mt-3 min-h-7 text-lg font-medium text-rose-600" role="alert">{error}</p>
-      <button type="submit" className={submitClass}>Next</button>
+      <p className="mt-3 min-h-7 text-lg font-medium text-destructive" role="alert">{error}</p>
+      <Button type="submit" className={`mt-5 px-10 ${bigButton}`}>Next</Button>
     </form>
   )
 }

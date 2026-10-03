@@ -8,6 +8,9 @@ import StartScreen from './components/StartScreen.tsx'
 import QuestionCard from './components/QuestionCard.tsx'
 import LearnForm from './components/LearnForm.tsx'
 import Robot from './components/Robot.tsx'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { bigButton } from '@/lib/styles'
 
 const STORAGE_KEY = 'guess-the-animal:tree'
 
@@ -70,11 +73,7 @@ export default function App() {
     setPhase('learned')
   }
 
-  const reset = () => {
-    if (window.confirm('Forget everything I learned and go back to the starting animals?')) {
-      setTree(startingTree)
-    }
-  }
+  const reset = () => setTree(startingTree)
 
   let content
   let key: string = phase
@@ -96,28 +95,24 @@ export default function App() {
     content = (
       <div className="text-center">
         <Robot mood="happy" className="mx-auto h-32 w-32" />
-        <h2 className="mt-4 text-4xl font-extrabold text-slate-800">
+        <h2 className="mt-4 text-4xl font-extrabold text-foreground">
           {phase === 'correct' ? 'I got it!' : 'Thanks! I learned a new animal.'}
         </h2>
-        <p className="mt-3 text-2xl text-slate-600">
+        <p className="mt-3 text-2xl text-muted-foreground">
           {phase === 'correct'
             ? `It was ${withArticle(animalName)}. Guessed in ${path.length} questions.`
             : `I now know ${countAnimals(tree)} animals.`}
         </p>
-        <button
-          autoFocus
-          onClick={() => setPhase('start')}
-          className="mt-8 rounded-2xl bg-indigo-600 px-10 py-4 text-2xl font-bold text-white shadow-lg transition hover:bg-indigo-700 active:scale-95"
-        >
+        <Button autoFocus size="lg" onClick={() => setPhase('start')} className={`mt-8 px-10 ${bigButton}`}>
           Play again
-        </button>
+        </Button>
       </div>
     )
   }
 
   return (
     <main className="flex min-h-screen items-center justify-center px-4 py-10">
-      <div className="w-full max-w-2xl rounded-3xl bg-white/80 p-6 shadow-xl ring-1 ring-slate-200 backdrop-blur sm:p-10">
+      <Card className="w-full max-w-2xl gap-0 rounded-3xl p-6 text-base shadow-xl backdrop-blur sm:p-10">
         <AnimatePresence mode="wait">
           <motion.div
             key={key}
@@ -129,7 +124,7 @@ export default function App() {
             {content}
           </motion.div>
         </AnimatePresence>
-      </div>
+      </Card>
     </main>
   )
 }

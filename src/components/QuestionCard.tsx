@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
 import { useIsPresent } from 'framer-motion'
+import { Button } from '@/components/ui/button'
+import { bigButton } from '@/lib/styles'
 import type { Answer } from '../utils/tree.ts'
 
 type Props = { label: string; text: string; onAnswer: (answer: Answer) => void }
@@ -24,23 +26,23 @@ export default function QuestionCard({ label, text, onAnswer: answer }: Props) {
 
   return (
     <div className="text-center">
-      <p className="text-lg font-semibold uppercase tracking-wider text-indigo-500">{label}</p>
-      <h2 className="mt-3 text-3xl font-bold leading-snug text-slate-800 sm:text-4xl">{text}</h2>
+      <p className="text-lg font-semibold uppercase tracking-wider text-primary">{label}</p>
+      <h2 className="mt-3 text-3xl font-bold leading-snug text-foreground sm:text-4xl">{text}</h2>
       <div className="mt-10 grid grid-cols-2 gap-4 sm:gap-6">
-        <button
+        <Button
           onClick={() => onAnswer('yes')}
-          className="rounded-2xl bg-emerald-500 py-5 text-3xl font-bold text-white shadow-lg transition hover:bg-emerald-600 active:scale-95"
+          className={`py-5 text-3xl ${bigButton} bg-emerald-500 text-white hover:bg-emerald-600`}
         >
           Yes
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => onAnswer('no')}
-          className="rounded-2xl bg-rose-500 py-5 text-3xl font-bold text-white shadow-lg transition hover:bg-rose-600 active:scale-95"
+          className={`py-5 text-3xl ${bigButton} bg-rose-500 text-white hover:bg-rose-600`}
         >
           No
-        </button>
+        </Button>
       </div>
-      <p className="mt-6 hidden text-base text-slate-400 sm:block">Keyboard: Y = Yes, N = No</p>
+      <p className="mt-6 hidden text-base text-muted-foreground sm:block">Keyboard: Y = Yes, N = No</p>
     </div>
   )
 }
