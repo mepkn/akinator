@@ -10,7 +10,7 @@ Live: https://akinator.pknspace.com
 
 - Starts with 50 animals in a hand-written decision tree.
 - Learns new animals from players and remembers them in the browser (`localStorage`).
-- "Forget everything" resets to the starting animals.
+- "Reset brain" (after a confirm dialog) forgets learned animals and goes back to the starting 50.
 - Rejects offensive words in names and questions (English and Hindi/Hinglish blocklist).
 - Animations and confetti on a correct guess.
 
@@ -19,6 +19,8 @@ Live: https://akinator.pknspace.com
 React 19 · TypeScript · Vite · Tailwind CSS v4 · shadcn/ui · Framer Motion · Vitest. No backend.
 
 ## Development
+
+Requires Node 22.18+ (`.nvmrc` pins 22).
 
 ```bash
 npm install
@@ -34,7 +36,7 @@ npm run dev
 | `npm run typecheck` | TypeScript check (`tsc -b`) |
 | `npm run preview` | Serve the built `dist/` locally |
 | `npm run lint` | ESLint |
-| `npm test` | Unit tests (Vitest) |
+| `npm test` | Unit tests (Vitest): tree validation, learning, input cleanup |
 | `npm run check` | Typecheck, lint and tests |
 | `npm run deploy` | Checks, builds and uploads to the VPS |
 | `npm run deploy:dry` | Same, but only previews the upload |
@@ -61,3 +63,4 @@ Caddy serves it directly (no restart needed).
   immutable, so each update produces a new tree that gets saved.
 - `validateTree` checks the tree is well-formed (no duplicates, no missing branches).
   `npm test` runs it against the starting tree, so edits to `animals.ts` are verified.
+- **UI.** shadcn/ui components live in `src/components/ui/` (vendored, added with `npx shadcn add`, not linted). The theme tokens in `src/index.css` give them the game's indigo, rounded look. `src/lib/styles.ts` holds the large classroom button style.
