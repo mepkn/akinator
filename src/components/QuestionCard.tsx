@@ -1,13 +1,18 @@
 import { useEffect } from 'react'
 import { useIsPresent } from 'framer-motion'
+import type { Answer } from '../utils/tree.ts'
 
-export default function QuestionCard({ label, text, onAnswer: answer }) {
+type Props = { label: string; text: string; onAnswer: (answer: Answer) => void }
+
+export default function QuestionCard({ label, text, onAnswer: answer }: Props) {
   // Ignore input while this card is animating out
   const isPresent = useIsPresent()
-  const onAnswer = (ans) => isPresent && answer(ans)
+  const onAnswer = (ans: Answer) => {
+    if (isPresent) answer(ans)
+  }
 
   useEffect(() => {
-    const onKey = (e) => {
+    const onKey = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.repeat) return
       const k = e.key.toLowerCase()
       if (k === 'y') onAnswer('yes')

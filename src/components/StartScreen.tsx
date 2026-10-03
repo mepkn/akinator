@@ -1,6 +1,8 @@
-import Robot from './Robot.jsx'
+import Robot from './Robot.tsx'
 
-export default function StartScreen({ count, onStart, onReset }) {
+type Props = { count: number; onStart: () => void; onReset: () => void }
+
+export default function StartScreen({ count, onStart, onReset }: Props) {
   return (
     <div className="text-center">
       <Robot className="mx-auto h-32 w-32 sm:h-40 sm:w-40" />

@@ -1,4 +1,6 @@
-export default function Robot({ mood = 'think', className = '' }) {
+type Props = { mood?: 'think' | 'happy' | 'sad'; className?: string }
+
+export default function Robot({ mood = 'think', className = '' }: Props) {
   return (
     <svg viewBox="0 0 120 120" className={className} aria-hidden="true">
       <line x1="60" y1="22" x2="60" y2="8" stroke="#6366f1" strokeWidth="5" strokeLinecap="round" />

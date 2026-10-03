@@ -16,7 +16,7 @@ Live: https://akinator.pknspace.com
 
 ## Stack
 
-React 19 · Vite · Tailwind CSS v4 · Framer Motion · Vitest. No backend.
+React 19 · TypeScript · Vite · Tailwind CSS v4 · Framer Motion · Vitest. No backend.
 
 ## Development
 
@@ -30,11 +30,12 @@ npm run dev
 | Command | What it does |
 |---|---|
 | `npm run dev` | Dev server at http://localhost:5173 |
-| `npm run build` | Production build into `dist/` |
+| `npm run build` | Typecheck and production build into `dist/` |
+| `npm run typecheck` | TypeScript check (`tsc -b`) |
 | `npm run preview` | Serve the built `dist/` locally |
 | `npm run lint` | ESLint |
 | `npm test` | Unit tests (Vitest) |
-| `npm run check` | Lint and tests |
+| `npm run check` | Typecheck, lint and tests |
 | `npm run deploy` | Checks, builds and uploads to the VPS |
 | `npm run deploy:dry` | Same, but only previews the upload |
 
@@ -53,10 +54,10 @@ Caddy serves it directly (no restart needed).
 
 ## How it works
 
-- The knowledge is a binary tree (`src/data/animals.js`): question nodes have `yes`/`no`
+- The knowledge is a binary tree (`src/data/animals.ts`): question nodes have `yes`/`no`
   children, leaves are animals. A game walks from the root to a leaf.
-- On a wrong guess, `insertAnimal` (`src/utils/tree.js`) replaces that leaf with the
+- On a wrong guess, `insertAnimal` (`src/utils/tree.ts`) replaces that leaf with the
   player's question, putting the new and old animals on its two branches. The tree is
   immutable, so each update produces a new tree that gets saved.
 - `validateTree` checks the tree is well-formed (no duplicates, no missing branches).
-  `npm test` runs it against the starting tree, so edits to `animals.js` are verified.
+  `npm test` runs it against the starting tree, so edits to `animals.ts` are verified.

@@ -6,10 +6,12 @@
 // To add or change animals, edit this tree and run `npm test` to check it.
 // Every path from the top to an animal must be factually true for that animal.
 
-const q = (text, yes, no) => ({ type: 'question', text, yes, no })
-const a = (name) => ({ type: 'animal', name })
+import type { AnimalNode, QuestionNode, TreeNode } from '../utils/tree.ts'
 
-export const startingTree = q(
+const q = (text: string, yes: TreeNode, no: TreeNode): QuestionNode => ({ type: 'question', text, yes, no })
+const a = (name: string): AnimalNode => ({ type: 'animal', name })
+
+export const startingTree: TreeNode = q(
   'Does it have 6 legs?',
   // Insects
   q(

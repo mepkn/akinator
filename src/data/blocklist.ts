@@ -2,7 +2,7 @@
 // Animal words like kutta, gadha, ullu are deliberately NOT listed.
 // Matching is case-insensitive and on whole words; longer words also match
 // when hidden inside other text (e.g. with spaces or symbols removed).
-export const blocklist = [
+export const blocklist: readonly string[] = [
   // English
   'fuck', 'fucker', 'fucking', 'fuk', 'fck', 'shit', 'bullshit', 'bitch', 'bastard',
   'asshole', 'arsehole', 'ass', 'arse', 'dick', 'dickhead', 'cock', 'pussy', 'cunt',

@@ -1,20 +1,27 @@
-import { useState } from 'react'
-import QuestionCard from './QuestionCard.jsx'
-import { cleanAnimalName, cleanQuestion, hasAnimal, withArticle } from '../utils/tree.js'
+import { useState, type FormEvent } from 'react'
+import QuestionCard from './QuestionCard.tsx'
+import { cleanAnimalName, cleanQuestion, hasAnimal, withArticle } from '../utils/tree.ts'
+import type { Answer, TreeNode } from '../utils/tree.ts'
+
+type Props = {
+  tree: TreeNode
+  oldAnimal: string
+  onLearn: (name: string, question: string, answer: Answer) => void
+}
 
 const inputClass =
   'mt-6 w-full rounded-2xl border-2 border-slate-200 bg-white px-5 py-4 text-2xl outline-none focus:border-indigo-500'
 const submitClass =
   'mt-5 rounded-2xl bg-indigo-600 px-10 py-4 text-2xl font-bold text-white shadow-lg transition hover:bg-indigo-700 active:scale-95'
 
-export default function LearnForm({ tree, oldAnimal, onLearn }) {
-  const [step, setStep] = useState('name')
+export default function LearnForm({ tree, oldAnimal, onLearn }: Props) {
+  const [step, setStep] = useState<'name' | 'question' | 'answer'>('name')
   const [value, setValue] = useState('')
   const [error, setError] = useState('')
   const [name, setName] = useState('')
   const [question, setQuestion] = useState('')
 
-  const submit = (e) => {
+  const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (step === 'name') {
       const res = cleanAnimalName(value)
